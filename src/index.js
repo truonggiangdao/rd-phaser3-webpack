@@ -1,16 +1,13 @@
 import Phaser from "phaser";
-import { preloadScene } from "./scenes/preload";
-import { createScene } from "./scenes/create";
 import { WIDTH, HEIGHT } from "./config";
+import { GameScene } from "./scenes/game";
 
 window.game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: "phaser-example",
   width: WIDTH,
   height: HEIGHT,
-  scene: {
-    preload: preloadScene,
-    create: createScene
-  }
+  scene: GameScene
 });
 window.canvas = null;
+window.scene = null;
