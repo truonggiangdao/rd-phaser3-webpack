@@ -7,6 +7,9 @@ window.game = new Phaser.Game({
   parent: "phaser-example",
   width: WIDTH,
   height: HEIGHT,
+  audio: {
+    disableWebAudio: true
+  },
   scene: GameScene
 });
 window.canvas = null;
