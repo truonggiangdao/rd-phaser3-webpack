@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { WIDTH, HEIGHT } from "../config";
-import { handleBrowserResize, getRandomInt } from "../helpers";
+import { handleBrowserResize, getRandomInt, destroyOnOut } from "../helpers";
 import { SPRITE_NAMES, getTextureIndex } from "../sprites";
 
 const RAW_ASSET_URLS = {
@@ -17,19 +17,21 @@ const KEY = {
   TILE_SHARP: "tileSharp",
 };
 
-const tilePool = [
+const TILE_POOL = [
   null,
   null,
   null,
   null,
 ];
 
-const poolCoordinates = [
+const POOL_COORS = [
   { x: (WIDTH * 0 / 4) + (WIDTH / 4 / 2), y: 0 },
   { x: (WIDTH * 1 / 4) + (WIDTH / 4 / 2), y: 0 },
   { x: (WIDTH * 2 / 4) + (WIDTH / 4 / 2), y: 0 },
   { x: (WIDTH * 3 / 4) + (WIDTH / 4 / 2), y: 0 },
 ];
+
+const MOVING_SPEED = 10;
 
 export class GameScene extends Phaser.Scene {
 
@@ -47,14 +49,18 @@ export class GameScene extends Phaser.Scene {
     this.addLines();
     this.addMusic();
     this.loadTides();
+
+    this.input.on('gameobjectup', (pointer, gameObject) => {
+      gameObject.emit('clicked', gameObject);
+    }, this);
   }
 
   update() {
-    tilePool.filter(t => !!t).forEach((tile, index) => {
+    TILE_POOL.forEach((tile, index) => {
       if (tile) {
-        tile.y += 5;
-        if (tile.y > HEIGHT) {
-          tilePool[index] = null;
+        tile.y += MOVING_SPEED;
+        if (tile.y > HEIGHT + tile.displayHeight) {
+          TILE_POOL[index] = null;
         }
       }
     });
@@ -94,7 +100,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   getRandomAvailablePool() {
-    const avPools = tilePool.map((s, i) => ({i, status: !!s})).filter(p => !p.status).map(p => p.i);
+    const avPools = TILE_POOL.map((s, i) => ({i, status: !!s})).filter(p => !p.status).map(p => p.i);
     if (!avPools.length) {
       return -1;
     }
@@ -105,16 +111,21 @@ export class GameScene extends Phaser.Scene {
   addTileToPool(poolIndex) {
     const atlasTexture = this.textures.get(KEY.ATLAS);
     const frames = atlasTexture.getFrameNames();
-    // tilePool[poolIndex] = true;
-    tilePool[poolIndex] = this.add.sprite(
-      poolCoordinates[poolIndex].x,
-      poolCoordinates[poolIndex].y,
+    TILE_POOL[poolIndex] = this.add.sprite(
+      POOL_COORS[poolIndex].x,
+      POOL_COORS[poolIndex].y,
       KEY.ATLAS,
       frames[getTextureIndex(frames, SPRITE_NAMES.TILE_SHARP)])
-      .setOrigin(0.5);
-    const tileRatio = tilePool[poolIndex].width / tilePool[poolIndex].height;
-    tilePool[poolIndex].displayWidth = 50;
-    tilePool[poolIndex].displayHeight = tilePool[poolIndex].displayWidth / tileRatio;
+      .setOrigin(0.5).setInteractive();
+    TILE_POOL[poolIndex].inputEnabled = true;
+    const tileRatio = TILE_POOL[poolIndex].width / TILE_POOL[poolIndex].height;
+    TILE_POOL[poolIndex].displayWidth = TILE_POOL[poolIndex].width * 0.5;
+    TILE_POOL[poolIndex].displayHeight = TILE_POOL[poolIndex].displayWidth / tileRatio;
+    destroyOnOut(TILE_POOL[poolIndex]);
+    // TILE_POOL[poolIndex].on('clicked', (pointer, gameObject) => {
+    //   console.log(pointer);
+    //   pointer.destroy();
+    // }, this);
   }
 
 

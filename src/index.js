@@ -3,7 +3,7 @@ import { WIDTH, HEIGHT } from "./config";
 import { GameScene } from "./scenes/game";
 
 window.game = new Phaser.Game({
-  type: Phaser.AUTO,
+  type: Phaser.CANVAS,
   parent: "phaser-example",
   width: WIDTH,
   height: HEIGHT,
