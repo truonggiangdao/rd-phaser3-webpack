@@ -4,9 +4,9 @@ export const getBrowserSize = () => ({
 });
 
 export const onBrowserResize = (el) => {
-  const { width } = getBrowserSize();
+  const { width, height } = getBrowserSize();
   el.style.width = width + 'px';
-  el.style.height = Math.ceil(width * 16 / 9) + 'px';
+  el.style.height = height + 'px';
 };
 
 export const handleBrowserResize = () => {

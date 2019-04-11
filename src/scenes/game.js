@@ -1,20 +1,20 @@
-import Phaser from "phaser";
-import { WIDTH, HEIGHT } from "../config";
-import { handleBrowserResize, getRandomInt, destroyOnOut } from "../helpers";
-import { SPRITE_NAMES, getTextureIndex } from "../sprites";
+import Phaser from 'phaser';
+import { WIDTH, HEIGHT } from '../config';
+import { handleBrowserResize, getRandomInt, destroyOnOut } from '../helpers';
+import { SPRITE_NAMES, getTextureIndex } from '../sprites';
 
 const RAW_ASSET_URLS = {
-  BG: "assets/background.png",
-  AUDIO: "assets/GodGaveMeYou_BlakeShelton.mp3",
-  ATLAS_IMG: "assets/atlas.png",
-  ATLAS_DATA: "assets/atlas.json",
+  BG: 'assets/background.png',
+  AUDIO: 'assets/GodGaveMeYou_BlakeShelton.mp3',
+  ATLAS_IMG: 'assets/atlas.png',
+  ATLAS_DATA: 'assets/atlas.json',
 };
 
 const KEY = {
-  ATLAS: "atlas",
-  BACKGROUND_IMG: "bgImg",
-  BACKGROUND_MUSIC: "bgMusic",
-  TILE_SHARP: "tileSharp",
+  ATLAS: 'atlas',
+  BACKGROUND_IMG: 'bgImg',
+  BACKGROUND_MUSIC: 'bgMusic',
+  TILE_SHARP: 'tileSharp',
 };
 
 const TILE_POOL = [
@@ -43,7 +43,7 @@ export class GameScene extends Phaser.Scene {
 
   create() {
     window.scene = this;
-    window.canvas = document.querySelector("canvas");
+    window.canvas = document.querySelector('canvas');
     handleBrowserResize();
     this.addBgImg();
     this.addLines();
@@ -115,8 +115,8 @@ export class GameScene extends Phaser.Scene {
       POOL_COORS[poolIndex].x,
       POOL_COORS[poolIndex].y,
       KEY.ATLAS,
-      frames[getTextureIndex(frames, SPRITE_NAMES.TILE_SHARP)])
-      .setOrigin(0.5).setInteractive();
+      frames[getTextureIndex(frames, SPRITE_NAMES.TILE_SHARP)]
+    ).setOrigin(0.5).setInteractive();
     TILE_POOL[poolIndex].inputEnabled = true;
     const tileRatio = TILE_POOL[poolIndex].width / TILE_POOL[poolIndex].height;
     TILE_POOL[poolIndex].displayWidth = TILE_POOL[poolIndex].width * 0.5;
